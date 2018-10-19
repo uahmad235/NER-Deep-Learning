@@ -1,0 +1,4 @@
+__pycache__/
+keras-crf-layer-master/
+glove.6B.100d.txt
+*.csv
