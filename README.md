@@ -35,5 +35,5 @@ python ner_tagger.py
 * To avoid training model every time you run the code, comment the following line in `ner_tagger.py` file:
   ```NERTagger().train(TRAINING_DATASET_PATH)```
 
-* To run model inference on different text, change variable `texty` defined on top of `ner_tagger.py`
+* To run model inference on different text, change the value of variable `texty` defined on top of `ner_tagger.py`
 
