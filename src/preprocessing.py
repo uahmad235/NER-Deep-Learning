@@ -1,13 +1,11 @@
-import pandas as pd
-import numpy as np
+from nltk.tokenize import WordPunctTokenizer
 import nltk
+import re
 
 
 class Preprocessor(object):
     
     def __init__(self, data):
-
-        # self.path_to_dataset = path_to_dataset
         self.n_sent = 1
         self.data = data
         self.empty = False
@@ -18,7 +16,6 @@ class Preprocessor(object):
         self.sentences = [s for s in self.grouped]
 
     def get_next(self):
-
         try:
             s = self.grouped["Sentence: {}".format(self.n_sent)]
             self.n_sent += 1
@@ -29,33 +26,14 @@ class Preprocessor(object):
     def get_only_sentences_without_pos_nerTags(self):
 
         return [[token[0] for token in sent] for sent in self.sentences ] 
-        # return_sentences = []
-        # for sentence in self.sentences:
-        #     seq = []
-        #     for token in sentence:
-        #         seq.append(token[0])
-
-        #     return_sentences.append(seq)
-        # return return_sentences
 
 
 def get_tokens_from_sentences(sentences):
-
     tokens = [token for sentence in sentences for token in sentence]
-
     return tokens
 
 
 def normalize_to_sentences(text):
-
-    # print('Processing text dataset')
-    from nltk.tokenize import WordPunctTokenizer
-    from collections import Counter
-    from string import punctuation, ascii_lowercase
-    # import regex as re
-    # from tqdm import tqdm
-    import re
-    # replace urls
     re_url = re.compile(r"((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\
                         .([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*",
                         re.MULTILINE|re.UNICODE)
@@ -66,26 +44,12 @@ def normalize_to_sentences(text):
     text = re_url.sub("URL", text)
     # replace IPs
     text = re_ip.sub("IPADDRESS", text)
-
-    # print(text)
     # setup tokenizer
-    tokenizer = WordPunctTokenizer()
-
-    # sent_text = [sent for sent in nltk.tokenize.sent_tokenize(text)] # this gives us a list of sentences
     sent_text = []
     for sentence in nltk.tokenize.sent_tokenize(text):
         # for sentence in sentences:
         sent_text.append(nltk.tokenize.word_tokenize(sentence))
-    
     return sent_text
-
-    # now loop over each sentence and tokenize it separately
-    # for sentence in sent_text:
-    #     tokenized_text = nltk.word_tokenize(sentence)
-    #     tagged = nltk.pos_tag(tokenized_text)
-    #     print(tagged)
-
-
 
 
 def word2features(sent, i):
@@ -145,19 +109,3 @@ def sent2features(sent):
 def sent2labels(sent):
 	""" returns list of label against specific token """
 	return [label for token, postag, label in sent]
-
-
-def get_X_y(data):
-	""" returns the data in x and y"""
-	getter = SentenceGetter(data)
-
-	# list of (word,POS,Tag)
-	sentences = getter.sentences
-
-	# features_sent = sent2features(sentences)
-	# print(features_sent[:5])
-
-	X = [sent2features(s) for s in sentences]
-	y = [sent2labels(s) for s in sentences]
-
-	return X, y

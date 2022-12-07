@@ -1,9 +1,9 @@
 
+from src.model import create_model
+from src.tagger import predict
+from src.utils import load_model_params, plot_history, save_model_params
+import numpy as np
 
-from .Sequence import *
-from .preprocessing import *
-from .Utils import *
-from .Tagger import predict
 
 class Trainer(object):
 
@@ -17,7 +17,6 @@ class Trainer(object):
 		""" build necessary components of NER system for training, this includes
 		generating sequence of words and creating model with required params """
 
-		# self.sObj = Sequence(self.preprocessor.words, self.preprocessor.sentences, tags=preprocessor.tags)
 		refined_sentences = self.preprocessor.get_only_sentences_without_pos_nerTags()
 		self.sObj.generate_dicts_from_vocab()
 		self.sObj.generate_input_sequence(refined_sentences)
@@ -32,7 +31,6 @@ class Trainer(object):
 
 	def fit(self, _batch_size = 32, _epochs = 5):
 		""" trains the model on training data """
-		# self.sObj.split_test_train()
 		# generate sequence of preprocessed words
 		self.history = self.model.fit([self.sObj.X_tr, np.array(self.sObj.X_char_tr)],\
 								np.array(self.sObj.y_tr),batch_size=_batch_size,\
