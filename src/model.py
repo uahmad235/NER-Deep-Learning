@@ -49,7 +49,7 @@ def create_model(max_len, n_words, n_tags, pos_tags ,\
 	return model
 
 
-def prepare_glove_embeddings(path = "./NER/data/glove.6B.100d.txt"):
+def prepare_glove_embeddings(path = "./data/glove.6B.100d.txt"):
 	""" loads Google's glove 100-D word-embeddings for training """
 	print("started reading glove ...")
 	embeddings_index = {}
@@ -59,7 +59,6 @@ def prepare_glove_embeddings(path = "./NER/data/glove.6B.100d.txt"):
 			word = values[0]
 			coefs = np.asarray(values[1:], dtype='float32')
 			embeddings_index[word] = coefs
-			# f.close()
 	print('Found %s word vectors.' % len(embeddings_index))
 	return embeddings_index
 

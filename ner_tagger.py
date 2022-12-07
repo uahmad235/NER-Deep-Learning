@@ -7,7 +7,7 @@ texty = "In the rugged Colorado Desert of California, there lies buried a treasu
 from src.utils import load_dataset
 from src.sequence import Sequence
 from src.model import create_model
-from ner_trainer import Trainer, NER_MODEL_OUTPUT_PATH
+from src.ner_trainer import Trainer
 from src.tagger import predict, build_custom_response
 from src.preprocessing import Preprocessor, normalize_to_sentences, get_tokens_from_sentences
 import os
@@ -15,7 +15,8 @@ import os
 # ignore the "tensorflow binary not compiled" warning for keras
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-TRAINING_DATASET_PATH = "./NER/data/ner_dataset.csv"
+TRAINING_DATASET_PATH = "./data/ner_dataset.csv"
+NER_MODEL_OUTPUT_PATH = "./saved_model/My_Custom_Model3.h5"
 
 
 
@@ -34,7 +35,7 @@ class NERTagger(object):
 		_data , _words, _tags, _pos = load_dataset(path_to_dataset)
 		preprocessor = Preprocessor(_data)
 		sObj = Sequence(_words, preprocessor.sentences, tags=_tags)
-		trainer = Trainer(sObj, preprocessor)
+		trainer = Trainer(sObj, preprocessor, NER_MODEL_OUTPUT_PATH)
 		trainer.build()
 		sObj.split_test_train()
 		trainer.fit(_epochs = _epochs)

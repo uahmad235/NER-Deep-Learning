@@ -27,9 +27,9 @@ class Sequence(object):
  
 	def load_dicts_from_disk(self):
 		"""load saved dictionaries for embeddings """
-		self.word2idx = save_load_word_idx("./NER/saved/word2idx.pkl", load = True)
+		self.word2idx = save_load_word_idx("./saved_model/word2idx.pkl", load = True)
 		self.idx2word = {i:w for w,i in self.word2idx.items() }
-		self.tag2idx = save_load_word_idx("./NER/saved/tag2idx.pkl", load = True)
+		self.tag2idx = save_load_word_idx("./saved_model/tag2idx.pkl", load = True)
 		self.idx2tag = {i:t for t,i in self.tag2idx.items() }
 
 	def _generate_words_sequence(self):
@@ -52,7 +52,6 @@ class Sequence(object):
 		# create a vocabulary with all possible/unique chars
 		self.chars = set([chars for word in self.words for chars in word])
 		self.n_chars = len(self.chars)
-		# print("n_chars::",self.n_chars) # 98
 		self.max_len_chars = 10
 
 		if not _trained:
@@ -62,7 +61,7 @@ class Sequence(object):
 			self.char2idx["UNK"] = 1
 			save_load_word_idx("char2idx.pkl", self.char2idx, save = True)
 		else:
-			self.char2idx = save_load_word_idx("./NER/saved/char2idx.pkl", load = True)	
+			self.char2idx = save_load_word_idx("./saved_model/char2idx.pkl", load = True)	
 	
 		# vice versa
 		self.idx2char = {i:char for char,i in self.char2idx.items()}
@@ -89,7 +88,6 @@ class Sequence(object):
 				sent_seq.append(word_seq)
 			# append sentence sequences as character-by-character to X_char for Model input
 			self.X_char.append(np.array(sent_seq))
-		# print(self.X_char[:2])
 
 
 	def generate_input_sequence(self, _sentences, trained = False):
@@ -111,7 +109,7 @@ class Sequence(object):
 		self.y = [to_categorical(i, num_classes = self.n_tags + 1) for i in self.y]
 
 	def generate_dicts_from_vocab(self):
- 		""" maps word to indices and vice versa for keeping track of Embeddings """
+		""" maps word to indices and vice versa for keeping track of Embeddings"""
 		self.word2idx = {w: i + 2 for i, w in enumerate(self.words)}
 		self.word2idx["ENDPAD"] = 0
 		self.word2idx["UNK"] = 1
@@ -120,5 +118,5 @@ class Sequence(object):
 		self.tag2idx["ENDPAD"] = 0
 		self.idx2tag = {i: t for t, i in self.tag2idx.items()}
 
-		save_load_word_idx("./NER/saved/word2idx.pkl", word2idx = self.word2idx , save = True)
-		save_load_word_idx("./NER/saved/tag2idx.pkl", word2idx = self.tag2idx , save = True)
+		save_load_word_idx("./saved_model/word2idx.pkl", word2idx = self.word2idx , save = True)
+		save_load_word_idx("./saved_model/tag2idx.pkl", word2idx = self.tag2idx , save = True)
