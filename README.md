@@ -17,7 +17,7 @@ The model architecture is a bit different from the original implementation in th
  * The data used for training is [CoNLL 2002](https://paperswithcode.com/dataset/conll-2002) dataset for NER and POS Tagging.
 
 
-## Train Model
+## Training & Inference
 
 * In order to train model, first update following paths in `ner_tagger.py` file:
 
@@ -31,3 +31,9 @@ NER_MODEL_OUTPUT_PATH = "./saved_model/My_Custom_Model3.h5"
 ```
 python ner_tagger.py
 ```
+
+* To avoid training model every time you run the code, comment the following line in `ner_tagger.py` file:
+  ```NERTagger().train(TRAINING_DATASET_PATH)```
+
+* To run model inference on different text, change variable `texty` defined on top of `ner_tagger.py`
+
